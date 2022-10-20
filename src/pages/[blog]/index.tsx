@@ -1,0 +1,98 @@
+import { GetStaticProps, GetStaticPaths } from 'next';
+import { DateTime } from 'luxon';
+import { Box, Container, Heading, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import serverConfig from '@/config/serverConfig';
+import {
+  obsidianFetch,
+  obsidianFetchCache,
+  obsidianFilterCacheByTag,
+  objAddSlugs,
+  filterGetKeys,
+  makeWebSlug,
+  ObsidianFrontmatter,
+  stripTitle
+} from '@/utils';
+import { Page, Markdown } from '@/components';
+import clientConfig from '@/config/clientConfig';
+
+const CHECK_TAG = `#${serverConfig.obsidian.blogTag}`;
+
+interface BlogPostProps {
+  title: string
+  slug: string
+  tags: string[]
+  frontmatter: ObsidianFrontmatter | Record<string, any>
+  content: string
+}
+
+export default function BlogPost({ title, slug, tags, frontmatter, content }: BlogPostProps) {
+  const light = useColorModeValue('gray.600', 'whiteAlpha.500');
+
+  return (
+    <Page title={title}>
+      <Container maxW="container.md">
+
+        <Box mt={8} mb={8}>
+          <Heading as="h1" mb={2} fontSize="6xl">{title}</Heading>
+          {frontmatter.date && (
+            <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm">
+              Published {DateTime.fromISO(frontmatter.date).toLocaleString(DateTime.DATE_FULL)}{
+                frontmatter.updated ? `; last updated ${DateTime.fromISO(frontmatter.updated).toLocaleString(DateTime.DATE_FULL)}` : ''
+              }.
+            </Text>
+          )}
+          {tags && tags.length > 0 && (
+            <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm">
+              Tags: {tags.map(t => <Link target="_blank" mr={2} href={`/tag/${t}`}>#{t}</Link>)}
+            </Text>
+          )}
+        </Box>
+
+        <Markdown content={content} />
+      </Container>
+    </Page>
+  );
+}
+
+export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) => {
+  if (!params?.blog || typeof params.blog !== 'string') return { notFound: true };
+  const slug: string = params.blog;
+
+  const cache = obsidianFilterCacheByTag(
+    objAddSlugs(
+      await obsidianFetchCache(serverConfig.obsidian.publishSiteId)
+    ),
+    CHECK_TAG
+  );
+
+  const pageKey = filterGetKeys(cache, (v: any) => v.slug === slug)[0];
+  if (!pageKey) return { notFound: true };
+
+  const cacheEntry = cache[pageKey]!;
+  const content = await obsidianFetch(serverConfig.obsidian.publishSiteId, pageKey);
+  const cleanedContent = content
+      .split(`\n`)
+      .filter(line => !(line.startsWith('# ') || line.startsWith('Tags: ')))
+      .join(`\n`);
+
+  return {
+    props: {
+      title: stripTitle(cacheEntry.headings?.[0]?.heading || pageKey),
+      slug,
+      tags: cacheEntry.tags!.map(t => t.tag.slice(1)).filter(t => t !== 'blog'),
+      frontmatter: cacheEntry.frontmatter || {},
+      content: cleanedContent,
+    },
+  };
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const cache = await obsidianFetchCache(serverConfig.obsidian.publishSiteId);
+  const blogCache = obsidianFilterCacheByTag(cache, CHECK_TAG);
+  const blogSlugs = Object.keys(blogCache).map(k => makeWebSlug(k));
+
+  return {
+    paths: blogSlugs.map(slug => ({ params: { blog: slug } })),
+    fallback: 'blocking',
+  };
+}

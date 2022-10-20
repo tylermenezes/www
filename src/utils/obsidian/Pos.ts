@@ -1,0 +1,1 @@
+export type ObsidianPos = [number, number, number, number, number, number];

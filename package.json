@@ -1,0 +1,48 @@
+{
+  "name": "@tylermenezes/www",
+  "description": "https://tyler.vc/",
+  "version": "2022.10.01",
+  "private": true,
+  "author": "Tyler Menezes <x@tyler.vc>",
+  "license": "Artistic-2.0",
+  "keywords": [],
+  "type": "module",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "2.3.6",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "chakra-ui-markdown-renderer": "^4.1.0",
+    "cross-fetch": "3.1.5",
+    "framer-motion": "^6",
+    "luxon": "^3.0.4",
+    "next": "12.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-markdown": "^8.0.3",
+    "remark": "^14.0.2",
+    "remark-frontmatter": "^4.0.1",
+    "remark-gfm": "^3.0.1",
+    "remark-parse": "^10.0.1",
+    "unified": "^10.1.2"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.0.2",
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "16.11.65",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
+    "@typescript-eslint/eslint-plugin": "5.40.0",
+    "@typescript-eslint/parser": "5.40.0",
+    "eslint": "8.25.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "3.5.1",
+    "eslint-plugin-import": "2.26.0",
+    "typescript": "4.8.4"
+  }
+}
