@@ -1,5 +1,4 @@
 import { ObsidianCache, ObsidianCacheEntry } from "./Cache";
-import { ObsidianTag } from "./Tag";
 
 export function obsidianFilterCacheByTag(cache: ObsidianCache, tag: string): ObsidianCache {
     const slugs = Object.keys(cache);

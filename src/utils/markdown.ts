@@ -4,7 +4,6 @@ import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkGfm from 'remark-gfm'
 import { toMarkdown } from 'mdast-util-to-markdown';
-import { valuesRecursive } from './tree'
 
 export async function markdownParse(markdown: string) {
   return unified()

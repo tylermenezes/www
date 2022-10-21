@@ -36,6 +36,6 @@ export function treeReorganizeByHeading(nodes: Content[]): HeadingTree | Content
 }
 
 export function valuesRecursive(tree: HeadingTree | Content[] | null): Content[] {
-  if (Array.isArray(tree) || typeof tree !== 'object' || !tree) return tree;
+  if (Array.isArray(tree) || typeof tree !== 'object' || !tree) return tree || [];
   return Object.values(tree).map(e => valuesRecursive(e) as unknown as Content);
 }

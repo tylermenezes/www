@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import { Box, ChakraProps } from '@chakra-ui/react';
 import ReactMarkdown from 'react-markdown';
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
