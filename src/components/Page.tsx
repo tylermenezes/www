@@ -5,10 +5,11 @@ import { DateTime } from 'luxon';
 
 export interface PageProps {
   title?: string
+  credits?: string
   children: ReactNode
 }
 
-export function Page({ title, children }: PageProps) {
+export function Page({ title, credits, children }: PageProps) {
   const bg = useColorModeValue('white', 'black');
   const fg = useColorModeValue('black', 'white');
   const light = useColorModeValue('gray.400', 'gray.600');
@@ -16,7 +17,7 @@ export function Page({ title, children }: PageProps) {
   return (
     <>
       <Head>
-        <title>{title ? `${title} / ` : ''}Tyler Menezes</title>
+        <title>{title ? `${title} / Tyler Menezes` : 'Tyler Menezes'}</title>
       </Head>
       <Box position="sticky" w="100%" top={0} zIndex={1000} mt={1} bg={bg}>
         <Container maxW="container.md">
@@ -67,8 +68,8 @@ export function Page({ title, children }: PageProps) {
       <Box>
         {children}
       </Box>
-      <Container maxW="container.md" mt={8} mb={8} color={light} fontSize="sm">
-        &copy; 2006&mdash;{DateTime.now().year} Tyler Menezes
+      <Container maxW="container.md" mt={8} mb={8} color={light} fontSize="sm" fontFamily="monospace">
+        &copy; 2006&mdash;{DateTime.now().year} Tyler Menezes. {credits}
       </Container>
     </>
   )

@@ -5,5 +5,6 @@ export interface ObsidianFrontmatter {
     publish?: boolean
     date?: string
     updated?: string
+    image?: string
     [key: string]: any
 };

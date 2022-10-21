@@ -1,8 +1,8 @@
-import serverConfig from '@/config/serverConfig';
+import clientConfig from '@/config/clientConfig';
 import { escapeRegex } from '../regex';
 
 export function stripTitle(title: string) {
-  const stripRegexInner = serverConfig.obsidian.stripSuffixes
+  const stripRegexInner = clientConfig.obsidian.stripSuffixes
     .map(s => escapeRegex(s.toLowerCase()))
     .join('|');
   const stripRegex = new RegExp(`(${stripRegexInner})$`, 'i');

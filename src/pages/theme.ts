@@ -52,5 +52,5 @@ export default extendTheme(
     components,
   },
   withDefaultColorScheme({ colorScheme: 'purple' }),
-  withDefaultColorScheme({ colorScheme: 'blue', components: ['Button'] }),
+  withDefaultColorScheme({ colorScheme: 'teal', components: ['Button'] }),
 );

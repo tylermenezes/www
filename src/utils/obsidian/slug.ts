@@ -8,15 +8,15 @@ export function makeWebSlug(originalSlug: string): string {
     .replace(/ /g, '-');
 }
 
-type ObjAddSlugReturnType<T, U> = T & Record<string, U & { slug: string }>;
+export type WithSlugs<T, U> = T & Record<string, U & { slug: string }>;
 
 export function objAddSlugs
   <U extends Record<string, any>, T extends Record<string, U | undefined>>(
     obj: T
-  ): ObjAddSlugReturnType<T, U> {
-  return <ObjAddSlugReturnType<T, U>> Object.keys(obj)
+  ): WithSlugs<T, U> {
+  return <WithSlugs<T, U>> Object.keys(obj)
     .reduce(
-      (accum: Partial<ObjAddSlugReturnType<T, U>>, k: string) => ({
+      (accum: Partial<WithSlugs<T, U>>, k: string) => ({
         ...accum,
         [k]: {
           ...obj[k],

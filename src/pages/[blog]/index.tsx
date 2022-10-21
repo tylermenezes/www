@@ -1,6 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { DateTime } from 'luxon';
-import { Box, Container, Heading, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Container, Heading, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import clientConfig from '@/config/clientConfig';
 import serverConfig from '@/config/serverConfig';
 import {
   obsidianFetch,
@@ -13,9 +14,8 @@ import {
   stripTitle
 } from '@/utils';
 import { Page, Markdown } from '@/components';
-import clientConfig from '@/config/clientConfig';
 
-const CHECK_TAG = `#${serverConfig.obsidian.blogTag}`;
+const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
 
 interface BlogPostProps {
   title: string
@@ -27,25 +27,43 @@ interface BlogPostProps {
 
 export default function BlogPost({ title, slug, tags, frontmatter, content }: BlogPostProps) {
   const light = useColorModeValue('gray.600', 'whiteAlpha.500');
+  const bg = useColorModeValue('white', 'black');
 
   return (
     <Page title={title}>
       <Container maxW="container.md">
 
-        <Box mt={8} mb={8}>
-          <Heading as="h1" mb={2} fontSize="6xl">{title}</Heading>
-          {frontmatter.date && (
-            <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm">
-              Published {DateTime.fromISO(frontmatter.date).toLocaleString(DateTime.DATE_FULL)}{
-                frontmatter.updated ? `; last updated ${DateTime.fromISO(frontmatter.updated).toLocaleString(DateTime.DATE_FULL)}` : ''
-              }.
-            </Text>
+        <Box mt={frontmatter.image ? 2 : 8} mb={8}>
+          {frontmatter.image && (
+            <Image src={frontmatter.image} w="100%" alt="" mb={-12} />
           )}
-          {tags && tags.length > 0 && (
-            <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm">
-              Tags: {tags.map(t => <Link target="_blank" mr={2} href={`/tag/${t}`}>#{t}</Link>)}
-            </Text>
-          )}
+          <Box ml={frontmatter.image ? 4 : 0}>
+            <Heading
+              as="h1"
+              mb={2}
+              fontSize="6xl"
+              backgroundColor={bg}
+              display="inline-block"
+              pl={frontmatter.image ? 2 : 0}
+              pr={frontmatter.image ? 2 : 0}
+              position="relative"
+              zIndex={500}
+            >
+              {title}
+            </Heading>
+            {frontmatter.date && (
+              <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm" pl={frontmatter.image ? 2 : 0}>
+                Published {DateTime.fromISO(frontmatter.date).toLocaleString(DateTime.DATE_FULL)}{
+                  frontmatter.updated ? `; last updated ${DateTime.fromISO(frontmatter.updated).toLocaleString(DateTime.DATE_FULL)}` : ''
+                }.
+              </Text>
+            )}
+            {tags && tags.length > 0 && (
+              <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm" pl={frontmatter.image ? 2 : 0}>
+                Tags: {tags.map(t => <Link target="_blank" mr={2} href={`/tag/${t}`}>#{t}</Link>)}
+              </Text>
+            )}
+          </Box>
         </Box>
 
         <Markdown content={content} />

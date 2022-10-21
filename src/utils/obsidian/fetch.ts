@@ -9,6 +9,5 @@ export async function obsidianFetchCache(siteId: string): Promise<ObsidianCache>
 
 export async function obsidianFetch(siteId: string, slug: string): Promise<string> {
     const response = await fetch(`${API_BASE}/access/${siteId}/${slug}`);
-    console.log(`${API_BASE}/access/${siteId}/${slug}`)
     return response.text();
 }
