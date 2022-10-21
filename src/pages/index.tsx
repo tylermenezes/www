@@ -47,7 +47,7 @@ export default function Index({ cache, cv }: IndexProps) {
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
             {cv.publications.map(e => (
-              <Box as="a" href={e.url!} target="_blank" key={e.url} mb={2} display="block">
+              <Box as="a" href={e.url!} target="_blank" rel="noreferrer" key={e.url} mb={2} display="block">
                 <Link as="div" fontSize="sm" lineHeight={1.3} display="inline-block">{e.title}</Link>
                 <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
                   {[e.conference, e.date ? DateTime.fromISO(e.date).toLocaleString(DateTime.DATE_FULL) : null].filter(Boolean).join(', ')}
@@ -58,7 +58,7 @@ export default function Index({ cache, cv }: IndexProps) {
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Press</Heading>
             {cv.press.map(e => (
-              <Box as="a" href={e.url!} target="_blank" key={e.url} mb={2} display="block">
+              <Box as="a" href={e.url!} target="_blank" rel="noreferrer" key={e.url} mb={2} display="block">
                 <Link as="div" fontSize="sm" lineHeight={1.3} display="inline-block">{e.title}</Link>
                 <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
                   {[e.outlet, e.date ? DateTime.fromISO(e.date).toLocaleString(DateTime.DATE_FULL) : null].filter(Boolean).join(', ')}

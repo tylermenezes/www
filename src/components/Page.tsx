@@ -39,6 +39,7 @@ export function Page({ title, credits, children }: PageProps) {
                 variant="ghost"
                 href="https://flickr.com/tylermenezes"
                 target="_blank"
+                rel="noreferrer"
                 fontFamily="monospace"
               >
                 Photos
@@ -48,6 +49,7 @@ export function Page({ title, credits, children }: PageProps) {
                 variant="ghost"
                 href="https://notes.tyler.vc/"
                 target="_blank"
+                rel="noreferrer"
                 fontFamily="monospace"
               >
                 Notes
