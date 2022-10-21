@@ -43,11 +43,13 @@ export default function BlogPost({ title, slug, tags, frontmatter, content }: Bl
               mb={2}
               fontSize={{ base: '4xl', md: '5xl', xl: '6xl' }}
               backgroundColor={bg}
-              display="inline-block"
+              display="inline"
               pl={frontmatter.image ? 2 : 0}
               pr={frontmatter.image ? 2 : 0}
               position="relative"
               zIndex={500}
+              boxDecorationBreak="clone"
+              lineHeight={1.3}
             >
               {title}
             </Heading>
@@ -101,6 +103,7 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
       frontmatter: cacheEntry.frontmatter || {},
       content: cleanedContent,
     },
+    revalidate: 300,
   };
 }
 

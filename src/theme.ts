@@ -22,12 +22,6 @@ export const styles = {
       fontFamily: 'body',
       fontSize: 'lg',
     },
-    a: {
-      color: 'teal.500',
-      _hover: {
-        textDecoration: 'underline',
-      },
-    },
   }),
 };
 
@@ -40,6 +34,9 @@ export const components = {
   Link: {
     baseStyle: {
       color: 'teal.500',
+      _hover: {
+        textDecoration: 'underline',
+      },
     },
   },
 }

@@ -12,7 +12,7 @@ export interface PageProps {
 export function Page({ title, credits, children }: PageProps) {
   const bg = useColorModeValue('white', 'black');
   const fg = useColorModeValue('black', 'white');
-  const light = useColorModeValue('gray.400', 'gray.600');
+  const light = useColorModeValue('gray.400', 'whiteAlpha.400');
 
   return (
     <>
