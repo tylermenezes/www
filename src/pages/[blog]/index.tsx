@@ -30,7 +30,7 @@ export default function BlogPost({ title, slug, tags, frontmatter, content }: Bl
   const bg = useColorModeValue('white', 'black');
 
   return (
-    <Page title={title}>
+    <Page title={title} credits={frontmatter.credits}>
       <Container maxW="container.md">
 
         <Box mt={frontmatter.image ? 2 : 8} mb={8}>

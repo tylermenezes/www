@@ -6,5 +6,6 @@ export interface ObsidianFrontmatter {
     date?: string
     updated?: string
     image?: string
+    credits?: string
     [key: string]: any
 };
