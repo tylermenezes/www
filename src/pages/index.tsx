@@ -63,7 +63,7 @@ export default function Index({ cache, cv }: IndexProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps<IndexProps> = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const cv = await fetchCv();
   const cache = obsidianFilterCacheByTag(
     objAddSlugs(
