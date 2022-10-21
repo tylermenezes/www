@@ -51,7 +51,7 @@ function parseOpenSource(content: Content[]): OpenSource {
   return { url, title, description };
 }
 
-export type SkillBlock = [(string | null), (string | null)[]];
+export type SkillBlock = [(string | null), (string | null)[] | null];
 export interface Cv {
   bio: string | null
   skills: SkillBlock[]
@@ -77,7 +77,7 @@ export async function fetchCv(): Promise<Cv> {
     .trim()
     .split(`\n`)
     ?.map(s => s.split(': '))
-    ?.map(([cat, skill]): SkillBlock => [cat.trim() || null, skill?.split(',')?.map(e => e?.trim() || null)]);
+    ?.map(([cat, skill]): SkillBlock => [cat.trim() || null, skill?.split(',')?.map(e => e?.trim() || null) || null]);
   const roles = Object.values(mdParsed['Work Experience']).slice(1).map(parseWorkExperience);
   const education = Object.values(mdParsed['Education']).slice(1).map(parseEducation);
   const volunteering = Object.values(mdParsed['Volunteering']).slice(1).map(parseWorkExperience);
