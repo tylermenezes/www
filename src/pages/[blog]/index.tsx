@@ -35,13 +35,13 @@ export default function BlogPost({ title, slug, tags, frontmatter, content }: Bl
 
         <Box mt={frontmatter.image ? 2 : 8} mb={8}>
           {frontmatter.image && (
-            <Image src={frontmatter.image} w="100%" alt="" mb={-12} />
+            <Image src={frontmatter.image} w="100%" alt="" mb={{ base: -6, md: -8, lg: -12 }} />
           )}
           <Box ml={frontmatter.image ? 4 : 0}>
             <Heading
               as="h1"
               mb={2}
-              fontSize="6xl"
+              fontSize={{ base: '4xl', md: '5xl', xl: '6xl' }}
               backgroundColor={bg}
               display="inline-block"
               pl={frontmatter.image ? 2 : 0}
