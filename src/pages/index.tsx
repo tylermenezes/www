@@ -1,7 +1,7 @@
-import { Markdown, Page } from '@/components';
+import { Markdown, Page, CvSummaryEntry } from '@/components';
 import clientConfig from '@/config/clientConfig';
 import serverConfig from '@/config/serverConfig';
-import { Cv, fetchCv, objAddSlugs, ObsidianCache, obsidianFetchCache, obsidianFilterCacheByTag, stripTitle, WithSlugs } from '@/utils';
+import { Cv, fetchCv, objAddSlugs, ObsidianCache, obsidianFetchCache, obsidianFilterCacheByTag, stripTitle, titleCase, WithSlugs } from '@/utils';
 import { Box, Container, Grid, Heading, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { GetStaticProps } from 'next';
@@ -16,65 +16,67 @@ export interface IndexProps {
 export default function Index({ cache, cv }: IndexProps) {
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
 
+  const blogPosts = Object.values(cache)
+    .filter(e => e.headings && e.headings.length > 0)
+    .map(e => ({ ...e, tags: e.tags?.filter(t => t.tag !== CHECK_TAG) })) // Remove blog from tag list.
+    .map(e => ({
+      ...e,
+      primaryTag: e.tags?.[0] ? titleCase(e.tags[0].tag.substring(1)) : null,
+      date: e.frontmatter?.date,
+      luxonDate: e.frontmatter?.date && DateTime.fromISO(e.frontmatter?.date),
+    }))
+    .sort((a, b) => {
+      if (!a.luxonDate) return -1;
+      if (!b.luxonDate) return 1;
+      return (a.luxonDate > b.luxonDate) ? -1 : 1;
+    })
+
   return (
     <Page credits="Header photo © Amelia Bertozzi-Villa.">
       <Container maxW="container.lg" mt={8} mb={8}>
         <Image src="https://u.tyler.vc/blog-images/index.jpg" w="100%" alt="" mb={8} />
         <Grid templateColumns={{ base: '1fr', md: '12fr 5fr' }} gap={8} mb={8}>
-          <Box>{cv.bio && <Markdown content={cv.bio} />}</Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Essays/Blog Posts</Heading>
-            {Object.values(cache)
-              .filter(e => e.headings && e.headings.length > 0)
-              .map(e => ({ ...e, tags: e.tags?.filter(t => t.tag !== CHECK_TAG)}))
-              .map(e => (
-                <Box as="a" href={e.slug} key={e.slug} mb={2} display="block">
-                  <Link as="div">{stripTitle(e.headings![0].heading)}</Link>
-                  <Text fontSize="sm" fontFamily="monospace" color={light}>
-                  {
-                    [
-                      e.tags?.[0] && e.tags[0].tag[1].toUpperCase() + e.tags[0].tag.slice(2),
-                      e.frontmatter?.date && DateTime.fromISO(e.frontmatter.date).toLocaleString(DateTime.DATE_FULL)
-                    ].filter(Boolean).join(', ')
-                  }
-                  </Text>
-                </Box>
-              ))
-            }
+            {cv.bio && <Markdown content={cv.bio} />}
+
+            <Box mt={6}>
+              <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
+              <Grid templateColumns="repeat(8, 1fr)" gap={2}>
+                {[1, 2, 3, 4, 5].map((e, i) => (
+                  <a href={`/press-photos/press_${e}.jpg`} target="_blank" key={e}>
+                    <Image src={`/press-photos/press_${e}_sm.jpg`} alt={`Press photo ${i}.`} />
+                  </a>
+                ))}
+              </Grid>
+            </Box>
+          </Box>
+          <Box>
+            <Heading as="h2" fontSize="xl" mb={2}>Essays &amp; Blog Posts</Heading>
+            {blogPosts.map(e => (
+              <CvSummaryEntry
+                key={e.slug}
+                url={e.slug}
+                title={stripTitle(e.headings![0].heading)}
+                date={e.date}
+                info={e.primaryTag}
+                fontSize="lg"
+                target="_self"
+              />
+            ))}
           </Box>
         </Grid>
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
-            {cv.publications.map(e => (
-              <Box as="a" href={e.url!} target="_blank" rel="noreferrer" key={e.url} mb={2} display="block">
-                <Link as="div" fontSize="sm" lineHeight={1.3} display="inline-block">{e.title}</Link>
-                <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
-                  {[e.conference, e.date ? DateTime.fromISO(e.date).toLocaleString(DateTime.DATE_FULL) : null].filter(Boolean).join(', ')}
-                </Text>
-              </Box>
-            ))}
+            <Heading as="h2" fontSize="xl" mb={2}>Talks &amp; Interviews</Heading>
+            {cv.talksInterviews.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.venue} date={e.date} />)}
           </Box>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Press</Heading>
-            {cv.press.map(e => (
-              <Box as="a" href={e.url!} target="_blank" rel="noreferrer" key={e.url} mb={2} display="block">
-                <Link as="div" fontSize="sm" lineHeight={1.3} display="inline-block">{e.title}</Link>
-                <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
-                  {[e.outlet, e.date ? DateTime.fromISO(e.date).toLocaleString(DateTime.DATE_FULL) : null].filter(Boolean).join(', ')}
-                </Text>
-              </Box>
-            ))}
+            {cv.press.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.outlet} date={e.date} />)}
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
-            <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-              {[1, 2, 3, 4, 5].map((e, i) => (
-                <a href={`/press-photos/press_${e}.jpg`} target="_blank" key={e}>
-                  <Image src={`/press-photos/press_${e}_sm.jpg`} alt={`Press photo ${i}.`} />
-                </a>
-              ))}
-            </Grid>
+            <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
+            {cv.publications.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.conference} date={e.date} />)}
           </Box>
         </Grid>
       </Container>
@@ -83,13 +85,8 @@ export default function Index({ cache, cv }: IndexProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const cv = await fetchCv();
-  const cache = obsidianFilterCacheByTag(
-    objAddSlugs(
-      await obsidianFetchCache(serverConfig.obsidian.publishSiteId)
-    ),
-    CHECK_TAG
-  );
+  const [cv, cacheRaw] = await Promise.all([fetchCv(), obsidianFetchCache(serverConfig.obsidian.publishSiteId)]);
+  const cache = obsidianFilterCacheByTag(objAddSlugs(cacheRaw), CHECK_TAG);
 
   return {
     props: {

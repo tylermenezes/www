@@ -4,7 +4,10 @@ export interface HeadingTree {
   [key: string]: Content[] | HeadingTree
 }
 
-export function treeToString(nodes: Content[]): string {
+export function treeToString(nodes?: Content[] | Content | string): string {
+  if (typeof nodes === 'undefined' || nodes === null) return '';
+  if (typeof nodes === 'string') return nodes;
+  if (!Array.isArray(nodes)) return treeToString([nodes]);
   return nodes
     .map(node => (node.type === 'text' ? node.value : '') + ('children' in node ? treeToString(node.children) : ''))
     .filter(Boolean)
