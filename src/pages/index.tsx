@@ -42,7 +42,7 @@ export default function Index({ cache, cv }: IndexProps) {
             <Box mt={6}>
               <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
               <Grid templateColumns="repeat(8, 1fr)" gap={2}>
-                {[0, 1, 2, 3, 4, 5].map((e, i) => (
+                {[0, 1, 2, 3, 4].map((e, i) => (
                   <a href={`/press-photos/press_${e}.jpg`} target="_blank" key={e}>
                     <Image src={`/press-photos/press_${e}_sm.jpg`} alt={`Press photo ${i}.`} />
                   </a>
