@@ -42,7 +42,7 @@ export default function Index({ cache, cv }: IndexProps) {
             <Box mt={6}>
               <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
               <Grid templateColumns="repeat(8, 1fr)" gap={2}>
-                {[1, 2, 3, 4, 5].map((e, i) => (
+                {[0, 1, 2, 3, 4, 5].map((e, i) => (
                   <a href={`/press-photos/press_${e}.jpg`} target="_blank" key={e}>
                     <Image src={`/press-photos/press_${e}_sm.jpg`} alt={`Press photo ${i}.`} />
                   </a>
@@ -68,15 +68,42 @@ export default function Index({ cache, cv }: IndexProps) {
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Talks &amp; Interviews</Heading>
-            {cv.talksInterviews.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.venue} date={e.date} />)}
+            {cv.talksInterviews.map(e => (
+              <CvSummaryEntry
+                key={e.title}
+                title={e.title}
+                url={e.url}
+                info={e.venue}
+                date={e.date}
+                fontSize={{ base: 'lg', md: 'md'}}
+              />
+            ))}
           </Box>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Press</Heading>
-            {cv.press.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.outlet} date={e.date} />)}
+            {cv.press.map(e => (
+              <CvSummaryEntry
+                key={e.title}
+                title={e.title}
+                url={e.url}
+                info={e.outlet}
+                date={e.date}
+                fontSize={{ base: 'lg', md: 'md'}}
+              />
+            ))}
           </Box>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
-            {cv.publications.map(e => <CvSummaryEntry key={e.title} title={e.title} url={e.url} info={e.conference} date={e.date} />)}
+            {cv.publications.map(e => (
+              <CvSummaryEntry
+                key={e.title}
+                title={e.title}
+                url={e.url}
+                info={e.conference}
+                date={e.date}
+                fontSize={{ base: 'lg', md: 'md'}}
+              />
+            ))}
           </Box>
         </Grid>
       </Container>
