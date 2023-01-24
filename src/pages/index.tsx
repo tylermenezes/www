@@ -1,4 +1,4 @@
-import { Markdown, Page, CvSummaryEntry } from '@/components';
+import { Markdown, Page, CvSummaryEntry, PressPhotoChooser } from '@/components';
 import clientConfig from '@/config/clientConfig';
 import serverConfig from '@/config/serverConfig';
 import { Cv, fetchCv, objAddSlugs, ObsidianCache, obsidianFetchCache, obsidianFilterCacheByTag, stripTitle, titleCase, WithSlugs } from '@/utils';
@@ -41,13 +41,15 @@ export default function Index({ cache, cv }: IndexProps) {
 
             <Box mt={6}>
               <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
-              <Grid templateColumns="repeat(8, 1fr)" gap={2}>
-                {[0, 1, 2, 3, 4].map((e, i) => (
-                  <a href={`/press-photos/press_${e}.jpg`} target="_blank" key={e}>
-                    <Image src={`/press-photos/press_${e}_sm.jpg`} alt={`Press photo ${i}.`} />
-                  </a>
-                ))}
-              </Grid>
+              <PressPhotoChooser
+                gridLength={8}
+                photos={[
+                  { image: '/press-photos/press_0_sm.jpg', url: '/press-photos/press_0.jpg', credit: 'Erin Sylvester' },
+                  { image: '/press-photos/press_1_sm.jpg', url: '/press-photos/press_1.jpg', credit: 'Erin Sylvester' },
+                  { image: '/press-photos/press_2_sm.jpg', url: '/press-photos/press_2.jpg', credit: 'Amelia Bertozzi-Villa' },
+                  { image: '/press-photos/press_3_sm.jpg', url: '/press-photos/press_3.jpg', credit: 'Amelia Bertozzi-Villa' },
+                ]}
+              />
             </Box>
           </Box>
           <Box>
