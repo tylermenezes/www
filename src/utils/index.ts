@@ -5,3 +5,4 @@ export * from './regex';
 export * from './object';
 export * from './tree';
 export * from './titleCase';
+export * from './useWindowSize';

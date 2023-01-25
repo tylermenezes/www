@@ -32,7 +32,7 @@ export default function Index({ cache, cv }: IndexProps) {
     })
 
   return (
-    <Page credits="Header photo © Amelia Bertozzi-Villa.">
+    <Page>
       <Container maxW="container.lg" mt={8} mb={8}>
         <Image src="https://u.tyler.vc/blog-images/index.jpg" w="100%" alt="" mb={8} />
         <Grid templateColumns={{ base: '1fr', md: '12fr 5fr' }} gap={8} mb={8}>
@@ -42,7 +42,7 @@ export default function Index({ cache, cv }: IndexProps) {
             <Box mt={6}>
               <Heading as="h2" fontSize="xl" mb={2}>Press Photos</Heading>
               <PressPhotoChooser
-                gridLength={8}
+                templateColumns={{ base: `repeat(4, 1fr)`, md: `repeat(8, 1fr)` }}
                 photos={[
                   { image: '/press-photos/press_0_sm.jpg', url: '/press-photos/press_0.jpg', credit: 'Erin Sylvester' },
                   { image: '/press-photos/press_1_sm.jpg', url: '/press-photos/press_1.jpg', credit: 'Erin Sylvester' },
