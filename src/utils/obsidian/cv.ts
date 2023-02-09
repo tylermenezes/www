@@ -82,6 +82,8 @@ export interface Cv {
   talksInterviews: Talk[]
 }
 
+const NOT_FOUND = '## Not Found';
+
 export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   let cvMd = await obsidianFetch(serverConfig.obsidian.publishSiteId, clientConfig.obsidian.cv);
   if (cvMd.slice(0,4) === `---\n`) {
@@ -89,6 +91,10 @@ export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   }
   const cv = await markdownParse(cvMd);
   const mdParsed = treeReorganizeByHeading(cv) as HeadingTree;
+
+  if (cvMd.slice(0,NOT_FOUND.length) === NOT_FOUND) {
+    throw new Error(`Note ${clientConfig.obsidian.cv} found`);
+  }
 
   const filterRecommended = (e: any) => onlyRecommended ? (e.recommended !== false) : true;
   
