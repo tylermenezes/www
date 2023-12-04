@@ -1,4 +1,4 @@
-import { Content } from 'mdast'
+import { Content, Paragraph } from 'mdast'
 import serverConfig from '@/config/serverConfig';
 import { obsidianFetch } from "./fetch";
 import { markdownParse, renderMarkdown } from '../markdown';
@@ -20,18 +20,27 @@ function parseEducation(content: Content[]): Education {
   return { school, degree, interval };
 }
 
-export interface Publication { url: string | null, title: string | null, conference: string | null, date: string | null, authors: string | null, recommended: boolean }; 
-function parsePublication(content: Content[]): Publication {
+export interface Publication { url: string | null, title: string | null, conference: string | null, date: string | null, authors: string | null, cite: string | null, abstract: string | null, recommended: boolean }; 
+function parsePublication(_content: Content[] | HeadingTree): Publication {
+  const content = '_' in _content ? _content._ as Content[] : _content as Content[];
   const link = content[0].type === 'heading' && (content[0].children as Content[])?.filter(c => c.type === 'link')[0];
   const url = link && link.type === 'link' && link.url || null;
   const title = treeToString([content[0]]);
 
   const infoNode = content[1].type === 'paragraph' && content[1];
+  const citeNode = 'Citation' in _content
+    ? (_content.Citation as Content[])[1].type === 'paragraph' && (_content.Citation as Content[])[1] as Paragraph
+    : null;
+  const abstractNode = 'Abstract' in _content
+    ? (_content.Abstract as Content[])[1].type === 'paragraph' && (_content.Abstract as Content[])[1] as Paragraph
+    : null;
 
   const [conference, date] = infoNode ? treeToString(infoNode.children.slice(0, 2)).split(', ').map(e => e.trim()) : [];
   const authors = infoNode ? treeToString(infoNode.children.slice(3,4)).trim() : null;
-  const recommended = infoNode ? treeToString(infoNode.children.slice(4)).toLowerCase().trim().includes('recommended') : false;
-  return { url, title, conference, date, authors, recommended };
+  const recommended = infoNode ? treeToString(infoNode.children.slice(4,5)).toLowerCase().trim().includes('recommended') : false;
+  const cite = citeNode ? treeToString(citeNode.children).trim() : null;
+  const abstract = abstractNode ? treeToString(abstractNode.children).trim() : null;
+  return { url, title, conference, date, authors, recommended, cite, abstract };
 }
 
 export interface Press { url: string | null, title: string | null, outlet: string | null, date: string | null, recommended: boolean };
@@ -81,6 +90,7 @@ export interface Cv {
   openSource: OpenSource[]
   talksInterviews: Talk[]
 }
+export type CvList = Cv[keyof Omit<Cv, 'bio' | 'skills'>];
 
 const NOT_FOUND = '## Not Found';
 
@@ -89,6 +99,7 @@ export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   if (cvMd.slice(0,4) === `---\n`) {
     cvMd = cvMd.slice(cvMd.indexOf(`---\n`, 3) + 4)
   }
+  cvMd = cvMd.replace(/[“”]/g, '"').replace(/’/g, '\'').replace(/–/g, '-');
   const cv = await markdownParse(cvMd);
   const mdParsed = treeReorganizeByHeading(cv) as HeadingTree;
 
@@ -103,7 +114,7 @@ export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   const skills = renderMarkdown(valuesRecursive(mdParsed.Skills || {}).slice(1))
     .trim()
     .split(`\n`)
-    ?.map(s => s.split(': '))
+    ?.map(s => s.replace(/\*\*/g, '').split(': '))
     ?.map(([cat, skill]): SkillBlock => [cat.trim() || null, skill?.split(',')?.map(e => e?.trim() || null) || null]);
 
   const roles = Object.values(mdParsed['Work Experience'] || {}).slice(1).map(parseWorkExperience);
