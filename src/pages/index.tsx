@@ -53,7 +53,7 @@ export default function Index({ cache, cv }: IndexProps) {
             </Box>
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Essays &amp; Blog Posts</Heading>
+            <Heading as="h2" fontSize="xl" mb={2}>Essays &amp; RFCs</Heading>
             {blogPosts.map(e => (
               <CvSummaryEntry
                 key={e.slug}
