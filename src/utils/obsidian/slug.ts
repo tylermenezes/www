@@ -1,8 +1,8 @@
 import { stripTitle } from './title';
 
 export function makeWebSlug(originalSlug: string): string {
-
-  return stripTitle(originalSlug)
+  const fileName = originalSlug.split('/').slice(-1)[0];
+  return stripTitle(fileName)
     .toLowerCase()
     .replace(/  +/g, ' ')
     .replace(/ /g, '-');

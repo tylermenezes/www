@@ -99,7 +99,7 @@ export const getStaticProps: GetStaticProps<BlogPostProps> = async ({ params }) 
     props: {
       title: stripTitle(cacheEntry.headings?.[0]?.heading || pageKey),
       slug,
-      tags: cacheEntry.tags!.map(t => t.tag.slice(1)).filter(t => t !== CHECK_TAG),
+      tags: cacheEntry.tags!.map(t => t.tag.slice(1)).filter(t => t !== clientConfig.obsidian.blogTag),
       frontmatter: cacheEntry.frontmatter || {},
       content: cleanedContent,
     },

@@ -36,18 +36,6 @@ export function Page({ title, credits, children }: PageProps) {
             <Box alignSelf="flex-end">
               <Button
                 as="a"
-                rel="me"
-                size="md"
-                variant="ghost"
-                href="https://xanadu.ws/@tylermenezes"
-                target="_blank"
-                fontFamily="monospace"
-                display={{ base: 'none', md: 'inline' }}
-              >
-                Mastodon
-              </Button>
-              <Button
-                as="a"
                 variant="ghost"
                 href="https://flickr.com/tylermenezes"
                 target="_blank"

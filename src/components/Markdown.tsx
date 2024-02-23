@@ -16,6 +16,13 @@ export function Markdown({ content, ...props }: MarkdownProps) {
     <Box {...props}>
       <ReactMarkdown
         components={ChakraUIRenderer({
+          blockquote: props => {
+            return (
+              <Box mt={6} mb={6} ml={4} pl={4} borderLeftWidth={2} fontStyle="italic">
+                {props.children}
+              </Box>
+            )
+          },
           li: props => {
             const { children, checked } = props;
             let checkbox = null;
