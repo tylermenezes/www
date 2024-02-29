@@ -6,17 +6,30 @@ type CvEntry = { title: string, items: CvList };
 function* cvListItemToTex(
   item: Partial<UnionToIntersection<CvList[number]>>
 ): Generator<string> {
-  if (item.cite) { yield item.cite.replace(/\.$/, ''); return; }
+  if (item.cite) {
+    yield item.cite
+      .replace(/\.$/, '')
+      .replace(item.title || 'IGNOREME', `\\textbf{${item.title}}`);
+    return;
+  }
 
   if (item.interval) yield item.interval;
   else if (item.date) yield item.date;
   
-  if (item.role && item.company) yield `${item.role} at ${item.company}`;
+  if (item.role && item.company) yield `\\textbf{${item.role} at ${item.company}}`;
   if (item.degree && item.school) yield `${item.degree}, ${item.school}`;
-  if (item.title) yield `"${item.title}"`;
+  if (item.title) yield `\\textbf{\`\`${item.title}''}`;
 
   if (item.outlet) yield item.outlet;
   if (item.venue) yield item.venue;
+
+  if (item.blurb && (item as { type: string }).type === 'role') {
+    yield ' \\\\ \\begin{sublist}' + item.blurb
+      .replace(/ *[\-\*] +/g, '\\item ')
+      .replace(/\n\w*$/, '')
+      .replace(/\n/g, '')
+      + '\\end{sublist}'
+  };
 }
 
 function cvListToTex(list: CvList): string {
@@ -26,8 +39,9 @@ function cvListToTex(list: CvList): string {
       + [...cvListItemToTex(i)]
         .join('. ')
         .replace(/\&/g, '\\&')
+        .replace(/\$/g, '\\$')
+        .replace(/\%/g, '\\%')
         .replace(/(https?:\/\/[\w\.\/\?]+)/g, '\\href{$1}{$1}')
-      + '.'
     )
     .join('\n');
 }

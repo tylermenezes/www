@@ -79,6 +79,7 @@ function parseTalks(content: Content[]): Talk {
 }
 
 export type SkillBlock = [(string | null), (string | null)[] | null];
+type WithType<T, U> = T & { type: U };
 export interface Cv {
   bio: string | null
   skills: SkillBlock[]
@@ -93,6 +94,10 @@ export interface Cv {
 export type CvList = Cv[keyof Omit<Cv, 'bio' | 'skills'>];
 
 const NOT_FOUND = '## Not Found';
+
+function addTypeKeys<T extends Omit<CvList[number], 'type'>, U>(list: T[], typeKey: U): WithType<T, U>[] {
+  return list.map(e => ({ ...e, type: typeKey }));
+}
 
 export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   let cvMd = await obsidianFetch(serverConfig.obsidian.publishSiteId, clientConfig.obsidian.cv);
@@ -128,12 +133,12 @@ export async function fetchCv(onlyRecommended = false): Promise<Cv> {
   return {
     bio,
     skills,
-    roles,
-    education,
-    volunteering,
-    publications,
-    press,
-    openSource,
-    talksInterviews,
+    roles: addTypeKeys(roles, 'role'),
+    education: addTypeKeys(education, 'education'),
+    volunteering: addTypeKeys(volunteering, 'volunteering'),
+    publications: addTypeKeys(publications, 'publication'),
+    press: addTypeKeys(press, 'press'),
+    openSource: addTypeKeys(openSource, 'openSource'),
+    talksInterviews: addTypeKeys(talksInterviews, 'talk'),
   };
 }
