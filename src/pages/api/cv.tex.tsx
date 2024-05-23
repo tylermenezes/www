@@ -16,7 +16,7 @@ function* cvListItemToTex(
   if (item.interval) yield item.interval;
   else if (item.date) yield item.date;
   
-  if (item.role && item.company) yield `\\textbf{${item.role} at ${item.company}}`;
+  if (item.role && item.company) yield `\\textbf{${item.role}, ${item.company}}`;
   if (item.degree && item.school) yield `${item.degree}, ${item.school}`;
   if (item.title) yield `\\textbf{\`\`${item.title}''}`;
 
@@ -24,12 +24,10 @@ function* cvListItemToTex(
   if (item.venue) yield item.venue;
 
   if (item.blurb && (item as { type: string }).type === 'role') {
-    yield ' \\\\ \\begin{sublist}' + item.blurb
-      .replace(/ *[\-\*] +/g, '\\item ')
-      .replace(/\n\w*$/, '')
-      .replace(/\n/g, '')
-      + '\\end{sublist}'
-  };
+    yield ' \\\\\n\t\\begin{sublist}\n' + item.blurb.trim()
+      .replace(/ *[\-\*] +/g, `\t\\item `)
+      + '\n\t\\end{sublist}'
+  } else if (item.blurb) yield item.blurb;
 }
 
 function cvListToTex(list: CvList): string {
@@ -41,8 +39,11 @@ function cvListToTex(list: CvList): string {
         .replace(/\&/g, '\\&')
         .replace(/\$/g, '\\$')
         .replace(/\%/g, '\\%')
+        .replace(/\#/g, '\\#')
         .replace(/(https?:\/\/[\w\.\/\?]+)/g, '\\href{$1}{$1}')
+        .trim()
     )
+    .map(i => ['.', '}'].includes(i.slice(-1)) ? i : `${i}.`)
     .join('\n');
 }
 
@@ -65,21 +66,37 @@ export default async function handler(
       items: entries.publications,
     },
     {
-      title: 'Service \\& Outreach',
-      items: entries.volunteering,
+      title: 'Grants',
+      items: entries.grants,
+    },
+    {
+      title: 'Professional Service',
+      items: entries.service,
     },
     {
       title: 'Lectures, Talks, Workshops',
       items: entries.talksInterviews,
     },
     {
+      title: 'Affiliations',
+      items: entries.affiliations,
+    },
+    {
       title: 'Press',
       items: entries.press,
+    },
+    {
+      title: 'Volunteering',
+      items: entries.volunteering,
     },
   ];
 
   const texBody = sections
-    .map(({ title, items }) => `\\section{${title}}\n\\begin{cvlist}\n${cvListToTex(items)}\n\\end{cvlist}`)
+    .map(({ title, items }) => {
+      const itemTex = cvListToTex(items).trim();
+      if (itemTex.length === 0) return '';
+      return `\\section{${title}}\n\\begin{cvlist}\n${itemTex}\n\\end{cvlist}`;
+    })
     .join(`\n\n`);
 
   res.setHeader('Content-type', 'text/plain').send(texBody);
