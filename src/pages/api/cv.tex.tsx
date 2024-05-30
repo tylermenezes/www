@@ -99,6 +99,9 @@ export default async function handler(
     })
     .join(`\n\n`);
 
-  res.setHeader('Content-type', 'text/plain').send(texBody);
+  const bio = (entries.bio || '').replace(/\[([^\[\]]+)\]\(([^\(\)]+)\)/g, "\\href{$2}{$1}");
+  const tex = (bio ? `\\section{Biography}\n${bio}\\vspace{0.25in}\n\n` : '') + texBody;
+
+  res.setHeader('Content-type', 'text/plain').send(tex);
 
 }
