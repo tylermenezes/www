@@ -6,10 +6,11 @@ export interface CvSummaryEntryProps extends ChakraProps {
   url?: string | null
   date?: string | null
   info?: string | null
+  recommended?: boolean | null
   target?: '_blank' | '_self' | null
 }
 
-export function CvSummaryEntry({ title, url, date, info, target, ...props }: CvSummaryEntryProps) {
+export function CvSummaryEntry({ title, url, date, info, target, recommended, ...props }: CvSummaryEntryProps) {
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
 
   const luxonDate = date && DateTime.fromISO(date) || false;
@@ -19,8 +20,24 @@ export function CvSummaryEntry({ title, url, date, info, target, ...props }: CvS
   if (!title) return <></>;
 
   return (
-    <Box as="a" href={url || undefined} fontSize="md" target={target || '_blank'} rel="noreferrer" mb={3} display="block" {...props}>
-      <Link as="div" lineHeight={1.3} display="inline-block">{title}</Link>
+    <Box
+      as="a"
+      href={url || undefined}
+      fontSize="md"
+      target={target || '_blank'}
+      rel="noreferrer"
+      mb={3}
+      display="block"
+      {...props}
+    >
+      <Link
+        as="div"
+        lineHeight={1.3}
+        display="inline-block"
+      >
+        {recommended ? '✦ ' : ''}
+        {title}
+      </Link>
       {caption.length > 0 && (
         <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
           {caption.join(', ')}

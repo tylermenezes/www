@@ -1,35 +1,21 @@
 import { Markdown, Page, CvSummaryEntry, PressPhotoChooser } from '@/components';
 import clientConfig from '@/config/clientConfig';
 import serverConfig from '@/config/serverConfig';
-import { Cv, fetchCv, objAddSlugs, ObsidianCache, obsidianFetchCache, obsidianFilterCacheByTag, stripTitle, titleCase, WithSlugs } from '@/utils';
-import { Box, Container, Grid, Heading, Image, Link, Text, useColorModeValue } from '@chakra-ui/react';
+import { Rfc } from '@/utils';
+import { Cv } from '@/utils/cv';
+import { Box, Container, Grid, Heading, Image, useColorModeValue } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { GetStaticProps } from 'next';
 
 const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
 
 export interface IndexProps {
-  cache: WithSlugs<ObsidianCache, Record<string, any>>
-  cv: Cv
+  cv: Cv,
+  rfcs: Rfc[],
 }
 
-export default function Index({ cache, cv }: IndexProps) {
+export default function Index({ rfcs, cv }: IndexProps) {
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
-
-  const blogPosts = Object.values(cache)
-    .filter(e => e.headings && e.headings.length > 0)
-    .map(e => ({ ...e, tags: e.tags?.filter(t => t.tag !== CHECK_TAG) })) // Remove blog from tag list.
-    .map(e => ({
-      ...e,
-      primaryTag: e.tags?.[0] ? titleCase(e.tags[0].tag.substring(1)) : null,
-      date: e.frontmatter?.date,
-      luxonDate: e.frontmatter?.date && DateTime.fromISO(e.frontmatter?.date),
-    }))
-    .sort((a, b) => {
-      if (!a.luxonDate) return -1;
-      if (!b.luxonDate) return 1;
-      return (a.luxonDate > b.luxonDate) ? -1 : 1;
-    })
 
   return (
     <Page>
@@ -54,13 +40,13 @@ export default function Index({ cache, cv }: IndexProps) {
           </Box>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Essays &amp; RFCs</Heading>
-            {blogPosts.map(e => (
+            {rfcs.filter(r => !r.unlisted).map(e => (
               <CvSummaryEntry
                 key={e.slug}
                 url={e.slug}
-                title={stripTitle(e.headings![0].heading)}
-                date={e.date}
-                info={e.primaryTag}
+                title={e.title}
+                date={e.createdAt}
+                info={e.tags?.[0]}
                 fontSize="lg"
                 target="_self"
               />
@@ -77,6 +63,7 @@ export default function Index({ cache, cv }: IndexProps) {
                 url={e.url}
                 info={e.venue}
                 date={e.date}
+                recommended={e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}
@@ -90,6 +77,7 @@ export default function Index({ cache, cv }: IndexProps) {
                 url={e.url}
                 info={e.outlet}
                 date={e.date}
+                recommended={e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}
@@ -103,6 +91,7 @@ export default function Index({ cache, cv }: IndexProps) {
                 url={e.url}
                 info={e.conference}
                 date={e.date}
+                recommended={e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}
@@ -114,12 +103,14 @@ export default function Index({ cache, cv }: IndexProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const [cv, cacheRaw] = await Promise.all([fetchCv(), obsidianFetchCache(serverConfig.obsidian.publishSiteId)]);
-  const cache = obsidianFilterCacheByTag(objAddSlugs(cacheRaw), CHECK_TAG);
+  const [cv, rfcs] = await Promise.all([
+    await fetch('https://svc.tyler.vc/cv.json').then(r => r.json()),
+    await fetch('https://svc.tyler.vc/rfcs.json').then(r => r.json()),
+  ]);
 
   return {
     props: {
-      cache,
+      rfcs,
       cv,
     },
     revalidate: 300,
