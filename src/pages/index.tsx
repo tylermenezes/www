@@ -1,10 +1,8 @@
 import { Markdown, Page, CvSummaryEntry, PressPhotoChooser } from '@/components';
 import clientConfig from '@/config/clientConfig';
-import serverConfig from '@/config/serverConfig';
 import { Rfc } from '@/utils';
-import { Cv } from '@/utils/cv';
+import { Cv, CvList } from '@/utils/cv';
 import { Box, Container, Grid, Heading, Image, useColorModeValue } from '@chakra-ui/react';
-import { DateTime } from 'luxon';
 import { GetStaticProps } from 'next';
 
 const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
@@ -12,6 +10,12 @@ const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
 export interface IndexProps {
   cv: Cv,
   rfcs: Rfc[],
+}
+
+function sortRecommended(a: CvList[number], b: CvList[number]) {
+  if (a.recommended && !b.recommended) return -1;
+  if (!a.recommended && b.recommended) return 1;
+  return 1;
 }
 
 export default function Index({ rfcs, cv }: IndexProps) {
@@ -56,7 +60,7 @@ export default function Index({ rfcs, cv }: IndexProps) {
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Talks &amp; Interviews</Heading>
-            {cv.talksInterviews.map(e => (
+            {cv.talksInterviews.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
                 title={e.title}
@@ -64,13 +68,28 @@ export default function Index({ rfcs, cv }: IndexProps) {
                 info={e.venue}
                 date={e.date}
                 recommended={e.recommended}
+                details={!e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Press</Heading>
-            {cv.press.map(e => (
+            <Heading as="h2" fontSize="xl" mb={2}>Research Grants</Heading>
+            {cv.grants.filter(e => !e.title!.toLowerCase().includes('submitted')).sort(sortRecommended).map(e => (
+              <CvSummaryEntry
+                key={e.title}
+                title={e.title}
+                url={e.url}
+                info={e.sponsor}
+                date={e.date}
+                recommended={e.recommended}
+                details={!e.recommended}
+                fontSize={{ base: 'lg', md: 'md'}}
+              />
+            ))}
+
+            <Heading as="h2" fontSize="xl" mt={6} mb={2}>Press</Heading>
+            {cv.press.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
                 title={e.title}
@@ -78,13 +97,14 @@ export default function Index({ rfcs, cv }: IndexProps) {
                 info={e.outlet}
                 date={e.date}
                 recommended={e.recommended}
+                details={!e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}
           </Box>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
-            {cv.publications.map(e => (
+            {cv.publications.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
                 title={e.title}
@@ -92,6 +112,7 @@ export default function Index({ rfcs, cv }: IndexProps) {
                 info={e.conference}
                 date={e.date}
                 recommended={e.recommended}
+                details={!e.recommended}
                 fontSize={{ base: 'lg', md: 'md'}}
               />
             ))}

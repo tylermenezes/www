@@ -7,10 +7,11 @@ export interface CvSummaryEntryProps extends ChakraProps {
   date?: string | null
   info?: string | null
   recommended?: boolean | null
+  details?: boolean | null
   target?: '_blank' | '_self' | null
 }
 
-export function CvSummaryEntry({ title, url, date, info, target, recommended, ...props }: CvSummaryEntryProps) {
+export function CvSummaryEntry({ title, url, date, info, target, recommended, details, ...props }: CvSummaryEntryProps) {
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
 
   const luxonDate = date && DateTime.fromISO(date) || false;
@@ -34,6 +35,7 @@ export function CvSummaryEntry({ title, url, date, info, target, recommended, ..
         as="div"
         lineHeight={1.3}
         display="inline-block"
+        color={details ? light : 'teal.500'}
       >
         {recommended ? '✦ ' : ''}
         {title}
