@@ -12,6 +12,7 @@ export interface CvSummaryEntryProps extends ChakraProps {
 }
 
 export function CvSummaryEntry({ title, url, date, info, target, recommended, details, ...props }: CvSummaryEntryProps) {
+  const background = useColorModeValue('white', 'black');
   const normal = useColorModeValue('gray.600', 'whiteAlpha.700');
   const lighter = useColorModeValue('gray.400', 'whiteAlpha.400');
 
@@ -53,8 +54,8 @@ export function CvSummaryEntry({ title, url, date, info, target, recommended, de
               pr="4px"
               mr="5px"
               fontSize="2xs"
-              backgroundColor={normal}
-              color="black"
+              backgroundColor={lighter}
+              color={background}
               display="inline-block"
               fontFamily="monospace"
             >
