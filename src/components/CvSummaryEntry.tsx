@@ -35,7 +35,7 @@ export function CvSummaryEntry({ title, url, date, info, target, recommended, de
         as="div"
         lineHeight={1.3}
         display="inline-block"
-        color={details ? light : 'teal.500'}
+        color={details ? light : ''}
       >
         {recommended ? '✦ ' : ''}
         {title}

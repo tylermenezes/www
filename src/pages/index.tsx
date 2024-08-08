@@ -1,8 +1,9 @@
-import { Markdown, Page, CvSummaryEntry, PressPhotoChooser } from '@/components';
+import { Markdown, Page, CvSummaryEntry, PressPhotoChooser, MusicPreview, SmallSubheading } from '@/components';
+import { TravelMap } from '@/components/TravelMap';
 import clientConfig from '@/config/clientConfig';
-import { Rfc } from '@/utils';
+import { Rfc, Music, Trip } from '@/utils';
 import { Cv, CvList } from '@/utils/cv';
-import { Box, Container, Grid, Heading, Image, useColorModeValue } from '@chakra-ui/react';
+import { Box, Container, Divider, Grid, Heading, Image, Link, useColorModeValue } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 
 const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
@@ -10,6 +11,8 @@ const CHECK_TAG = `#${clientConfig.obsidian.blogTag}`;
 export interface IndexProps {
   cv: Cv,
   rfcs: Rfc[],
+  music: Music,
+  trips: Trip[],
 }
 
 function sortRecommended(a: CvList[number], b: CvList[number]) {
@@ -18,7 +21,7 @@ function sortRecommended(a: CvList[number], b: CvList[number]) {
   return 1;
 }
 
-export default function Index({ rfcs, cv }: IndexProps) {
+export default function Index({ rfcs, cv, music, trips }: IndexProps) {
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
 
   return (
@@ -57,6 +60,9 @@ export default function Index({ rfcs, cv }: IndexProps) {
             ))}
           </Box>
         </Grid>
+
+        <Divider mt={8} mb={8} />
+
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
           <Box>
             <Heading as="h2" fontSize="xl" mb={2}>Talks &amp; Interviews</Heading>
@@ -88,7 +94,7 @@ export default function Index({ rfcs, cv }: IndexProps) {
               />
             ))}
 
-            <Heading as="h2" fontSize="xl" mt={6} mb={2}>Press</Heading>
+            <Heading as="h2" fontSize="xl" mt={8} mb={2}>Press</Heading>
             {cv.press.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
@@ -118,21 +124,75 @@ export default function Index({ rfcs, cv }: IndexProps) {
             ))}
           </Box>
         </Grid>
+
+        <Divider mt={8} mb={8} />
+
+
+        <Heading as="h2" fontSize="xl" mb={4}>Personal</Heading>
+        <Grid templateColumns={{ base: '1fr', md: '5fr 12fr' }} gap={8}>
+          <Box>
+            <SmallSubheading mb={2}>Recently Listening:</SmallSubheading>
+            <MusicPreview music={music.weeklyAlbum} />
+
+            <SmallSubheading mt={4} mb={2}>Most Listened:</SmallSubheading>
+            <MusicPreview music={music.overallAlbum} rows={3} />
+          </Box>
+
+          <Box>
+            <SmallSubheading mb={2}>Travel:</SmallSubheading>
+            <TravelMap
+              trips={[
+                ...trips,
+                { country: 'CA', state: 'British Columbia' },
+                { country: 'CA', state: 'Alberta' },
+                { country: 'CA', state: 'Ontario' },
+                { country: 'CA', state: 'Quebec' },
+                { country: 'CA', state: 'Manitoba' },
+                { country: 'GB', state: '' },
+                { country: 'TT', state: '' },
+                { country: 'QA', state: '' },
+                { country: 'US', state: 'ID' },
+                { country: 'US', state: 'CO' },
+                { country: 'US', state: 'WY' },
+                { country: 'US', state: 'KS' },
+                { country: 'US', state: 'WI' },
+                { country: 'US', state: 'AK' },
+                { country: 'US', state: 'HI' },
+                { country: 'US', state: 'MO' },
+                { country: 'US', state: 'MN' },
+                { country: 'US', state: 'MD' },
+                { country: 'US', state: 'DE' },
+                { country: 'US', state: 'WV' },
+                { country: 'US', state: 'NJ' },
+                { country: 'US', state: 'NH' },
+                { country: 'US', state: 'ME' },
+                { country: 'US', state: 'CT' },
+                { country: 'US', state: 'TN' },
+                { country: 'US', state: 'IN' },
+                { country: 'US', state: 'NM' },
+              ]}
+            />
+          </Box>
+        </Grid>
       </Container>
     </Page>
   )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const [cv, rfcs] = await Promise.all([
+  const [cv, rfcs, music, trips] = await Promise.all([
     await fetch('https://svc.tyler.vc/cv.json').then(r => r.json()),
     await fetch('https://svc.tyler.vc/rfcs.json').then(r => r.json()),
+    await fetch('https://svc.tyler.vc/music.json').then(r => r.json()),
+    await fetch('https://svc.tyler.vc/trips.json').then(r => r.json()),
   ]);
 
   return {
     props: {
       rfcs,
       cv,
+      music,
+      trips,
     },
     revalidate: 300,
   };

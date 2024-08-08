@@ -34,35 +34,33 @@ export function Page({ title, credits, children }: PageProps) {
               Tyler Menezes
             </Heading>
             <Box alignSelf="flex-end">
-              <Button
-                as="a"
-                variant="ghost"
+              <Link
+                mr={6}
+                fontSize="md"
                 href="https://flickr.com/tylermenezes"
                 target="_blank"
                 rel="noreferrer"
                 fontFamily="monospace"
               >
                 Photos
-              </Button>
-              <Button
-                as="a"
-                variant="ghost"
+              </Link>
+              <Link
+                mr={6}
+                fontSize="md"
                 href="https://notes.tyler.vc/"
                 target="_blank"
                 rel="noreferrer"
                 fontFamily="monospace"
               >
                 Notes
-              </Button>
-              <Button
-                as="a"
-                size="md"
-                variant="ghost"
+              </Link>
+              <Link
+                fontSize="md"
                 href="/meet"
                 fontFamily="monospace"
               >
                 Meet
-              </Button>
+              </Link>
             </Box>
           </Flex>
         </Container>

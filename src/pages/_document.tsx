@@ -7,6 +7,7 @@ export default function Document() {
       <Html lang='en'>
         <Head>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|Frank+Ruhl+Libre|Ubuntu+Mono&display=swap" />
+          <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet' />
         </Head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
