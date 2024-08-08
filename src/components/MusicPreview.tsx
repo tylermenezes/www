@@ -24,7 +24,7 @@ export function MusicPreview({ music, rows, ...props }: MusicPreviewProps) {
   return (
     <Grid templateColumns="repeat(6, 1fr)" gap={1} {...props}>
       {music.filter(a => a.image?.length > 0).slice(0, 6 * (rows || 1)).map(a => (
-        <Link href={a.url} target="_blank">
+        <Link key={a.url} href={a.url} target="_blank">
           <Image
             w="100%"
             src={a.image.sort(sortMusicImage)[0]['#text']}

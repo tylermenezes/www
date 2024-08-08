@@ -18,7 +18,7 @@ export interface IndexProps {
 function sortRecommended(a: CvList[number], b: CvList[number]) {
   if (a.recommended && !b.recommended) return -1;
   if (!a.recommended && b.recommended) return 1;
-  return 1;
+  return 0;
 }
 
 export default function Index({ rfcs, cv, music, trips }: IndexProps) {
