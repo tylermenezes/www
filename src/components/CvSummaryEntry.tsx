@@ -12,7 +12,8 @@ export interface CvSummaryEntryProps extends ChakraProps {
 }
 
 export function CvSummaryEntry({ title, url, date, info, target, recommended, details, ...props }: CvSummaryEntryProps) {
-  const light = useColorModeValue('gray.400', 'whiteAlpha.400');
+  const normal = useColorModeValue('gray.600', 'whiteAlpha.700');
+  const lighter = useColorModeValue('gray.400', 'whiteAlpha.400');
 
   const luxonDate = date && DateTime.fromISO(date) || false;
   const dateStr = (luxonDate && luxonDate.isValid) && luxonDate.toLocaleString(DateTime.DATE_FULL);
@@ -24,7 +25,6 @@ export function CvSummaryEntry({ title, url, date, info, target, recommended, de
     <Box
       as="a"
       href={url || undefined}
-      fontSize="md"
       target={target || '_blank'}
       rel="noreferrer"
       mb={3}
@@ -35,13 +35,32 @@ export function CvSummaryEntry({ title, url, date, info, target, recommended, de
         as="div"
         lineHeight={1.3}
         display="inline-block"
-        color={details ? light : ''}
+        fontSize={!details ? 'md' : 'sm'}
+        color={normal}
       >
-        {recommended ? '✦ ' : ''}
         {title}
       </Link>
       {caption.length > 0 && (
-        <Text fontSize="sm" color={light} fontFamily="monospace" mt={-1}>
+        <Text fontSize="sm" color={lighter} fontFamily="monospace" mt={-1}>
+        {recommended && (
+            <Box
+              position="relative"
+              top="-1px"
+              as="span"
+              rounded="md"
+              p="2px"
+              pl="4px"
+              pr="4px"
+              mr="5px"
+              fontSize="2xs"
+              backgroundColor={normal}
+              color="black"
+              display="inline-block"
+              fontFamily="monospace"
+            >
+              Featured
+            </Box>
+        )}
           {caption.join(', ')}
         </Text>
       )}

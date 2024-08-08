@@ -27,7 +27,7 @@ export default extendTheme(
           fontSize: 'lg',
         },
         a: {
-          color: props.colorMode === 'light' ? 'teal.500' : 'teal.600',
+          color: props.colorMode === 'light' ? 'teal.500' : 'teal.300',
         }
       }),
     },

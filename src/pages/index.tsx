@@ -65,7 +65,7 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
 
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Talks &amp; Interviews</Heading>
+            <Heading as="h2" fontSize="xl" mb={4}>Talks &amp; Interviews</Heading>
             {cv.talksInterviews.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
@@ -80,7 +80,7 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
             ))}
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Research Grants</Heading>
+            <Heading as="h2" fontSize="xl" mb={4}>Research Grants</Heading>
             {cv.grants.filter(e => !e.title!.toLowerCase().includes('submitted')).sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
@@ -94,7 +94,7 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
               />
             ))}
 
-            <Heading as="h2" fontSize="xl" mt={8} mb={2}>Press</Heading>
+            <Heading as="h2" fontSize="xl" mt={8} mb={4}>Press</Heading>
             {cv.press.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
@@ -109,7 +109,7 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
             ))}
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Publications</Heading>
+            <Heading as="h2" fontSize="xl" mb={4}>Publications</Heading>
             {cv.publications.sort(sortRecommended).map(e => (
               <CvSummaryEntry
                 key={e.title}
