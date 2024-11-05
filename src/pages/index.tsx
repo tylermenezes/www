@@ -37,10 +37,9 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
               <PressPhotoChooser
                 templateColumns={{ base: `repeat(4, 1fr)`, md: `repeat(8, 1fr)` }}
                 photos={[
-                  { image: '/press-photos/press_0_sm.jpg', url: '/press-photos/press_0.jpg', credit: 'Erin Sylvester' },
+                  { image: '/press-photos/press_4_sm.jpg', url: '/press-photos/press_4.jpg', credit: 'Eclipse Foundation (CC-ND 2.0)' },
                   { image: '/press-photos/press_1_sm.jpg', url: '/press-photos/press_1.jpg', credit: 'Erin Sylvester' },
                   { image: '/press-photos/press_2_sm.jpg', url: '/press-photos/press_2.jpg', credit: 'Amelia Bertozzi-Villa' },
-                  { image: '/press-photos/press_3_sm.jpg', url: '/press-photos/press_3.jpg', credit: 'Amelia Bertozzi-Villa' },
                 ]}
               />
             </Box>
