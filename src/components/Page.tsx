@@ -7,9 +7,10 @@ export interface PageProps {
   title?: string
   credits?: string
   children: ReactNode
+  noIndex?: boolean
 }
 
-export function Page({ title, credits, children }: PageProps) {
+export function Page({ title, credits, children, noIndex }: PageProps) {
   const bg = useColorModeValue('white', 'black');
   const fg = useColorModeValue('black', 'white');
   const light = useColorModeValue('gray.400', 'whiteAlpha.400');
@@ -18,6 +19,7 @@ export function Page({ title, credits, children }: PageProps) {
     <>
       <Head>
         <title>{title ? `${title} / Tyler Menezes` : 'Tyler Menezes'}</title>
+        {noIndex && <meta name="robots" content="noindex" />}
       </Head>
       <Box position="sticky" w="100%" top={0} zIndex={1000} mt={1} bg={bg}>
         <Container maxW="container.md">

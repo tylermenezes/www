@@ -14,7 +14,7 @@ export default function Meet({ trips }: MeetPageProps) {
   const tripStrings = upcomingTrips
     .map(t => `${t.location} from ${DateTime.fromISO(t.startDate).toLocaleString({ month: 'short', day: 'numeric' })} – ${DateTime.fromISO(t.endDate).toLocaleString(DateTime.DATE_MED)}`);
   return (
-    <Page title="Meet">
+    <Page title="Meet" noIndex>
       <Container maxW="container.md">
         <Heading fontSize="3xl" mt={8} mb={4}>Request a meeting</Heading>
         <Text mb={2}>Please add an agenda unless we already know each other.</Text>
