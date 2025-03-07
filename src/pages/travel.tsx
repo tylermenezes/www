@@ -1,5 +1,5 @@
 import { Page } from '@/components';
-import { Container, Heading, List, ListItem, Text } from '@chakra-ui/react';
+import { Container, Heading, List, ListItem, Text, Box } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import { DateTime } from 'luxon';
 import { Trip } from '@/utils';
@@ -10,6 +10,7 @@ interface MeetPageProps {
 
 export default function Meet({ trips }: MeetPageProps) {
   const upcomingTrips = trips.filter(t => t.upcoming || t.active);
+  const pastTrips = trips.filter(t => !(t.upcoming || t.active));
   return (
     <Page title="Travel" noIndex>
       <Container maxW="container.md">
@@ -25,6 +26,21 @@ export default function Meet({ trips }: MeetPageProps) {
             ))}
           </List>
         )}
+
+        <Box opacity={0.5} mt={8} mb={4}>
+          <Heading fontSize="2xl" mt={8} mb={4}>Past Travel</Heading>
+          {pastTrips.length == 0 ? <Text>No past travel.</Text> : (
+            <List styleType="disc" fontSize="md" ml={4}>
+              {pastTrips.map(t => (
+                <ListItem key={t.startDate}>
+                  <strong>{t.location}: </strong>
+                  {DateTime.fromISO(t.startDate).toLocaleString({ month: 'long', day: 'numeric' })} &mdash; 
+                  {DateTime.fromISO(t.endDate).toLocaleString({ month: 'long', day: 'numeric', year: 'numeric' })}
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
       </Container>
     </Page>
   )
