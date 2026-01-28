@@ -63,11 +63,6 @@ export default function BlogPost({
                 }.
               </Text>
             )}
-            {tags && tags.length > 0 && (
-              <Text color={light} fontFamily="monospace" fontWeight="bold" fontSize="sm" pl={image ? 2 : 0}>
-                Tags: {tags.map(t => <Link key={t} mr={2} href={`/tag/${t}`}>#{t}</Link>)}
-              </Text>
-            )}
           </Box>
         </Box>
 
