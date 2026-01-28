@@ -45,14 +45,13 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
             </Box>
           </Box>
           <Box>
-            <Heading as="h2" fontSize="xl" mb={2}>Essays &amp; RFCs</Heading>
+            <Heading as="h2" fontSize="xl" mb={2}>Notes/Essays/RFCs</Heading>
             {rfcs.filter(r => !r.unlisted).map(e => (
               <CvSummaryEntry
                 key={e.slug}
                 url={e.slug}
                 title={e.title}
                 date={e.createdAt}
-                info={e.tags?.[0]}
                 fontSize="lg"
                 target="_self"
               />
