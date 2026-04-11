@@ -70,7 +70,7 @@ export function Page({ title, credits, children, noIndex }: PageProps) {
               >
                 Notes
               </Link>
-              <Link fontSize="md" href="/meet" fontFamily="monospace">
+              <Link fontSize="md" href="/meet" fontFamily="monospace" mr={6}>
                 Meet
               </Link>
               <Link
