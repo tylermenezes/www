@@ -60,16 +60,6 @@ export function Page({ title, credits, children, noIndex }: PageProps) {
               >
                 Photos
               </Link>
-              <Link
-                mr={6}
-                fontSize="md"
-                href="https://notes.tyler.vc/"
-                target="_blank"
-                rel="noreferrer"
-                fontFamily="monospace"
-              >
-                Notes
-              </Link>
               <Link fontSize="md" href="/meet" fontFamily="monospace" mr={6}>
                 Meet
               </Link>
