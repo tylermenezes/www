@@ -207,11 +207,8 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
                 { country: "QA", state: "" },
                 { country: "US", state: "ID" },
                 { country: "US", state: "CO" },
-                { country: "US", state: "WY" },
                 { country: "US", state: "KS" },
                 { country: "US", state: "WI" },
-                { country: "US", state: "AK" },
-                { country: "US", state: "HI" },
                 { country: "US", state: "MO" },
                 { country: "US", state: "MN" },
                 { country: "US", state: "MD" },
@@ -221,9 +218,7 @@ export default function Index({ rfcs, cv, music, trips }: IndexProps) {
                 { country: "US", state: "NH" },
                 { country: "US", state: "ME" },
                 { country: "US", state: "CT" },
-                { country: "US", state: "TN" },
-                { country: "US", state: "IN" },
-                { country: "US", state: "NM" },
+                { country: "US", state: "FL" },
               ]}
             />
           </Box>
